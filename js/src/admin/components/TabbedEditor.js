@@ -21,11 +21,11 @@ export default class TabbedEditor extends Component {
                     onclick: () => {
                         this.tab = tab;
                     },
-                }, tab.title)),
+                }, app.translator.trans('clarkwinkelmann-scratchpad.admin.fields.' + tab.key))),
                 Button.component({
                     className: 'ScratchpadTabbedSettings Button Button--icon Button--link',
                     icon: 'fas fa-cog',
-                    title: 'Settings',
+                    title: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.settings'),
                     onclick() {
                         app.modal.show(new CodeMirrorSettingsModal());
                     },

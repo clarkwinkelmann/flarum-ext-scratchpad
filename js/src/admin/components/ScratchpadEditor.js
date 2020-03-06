@@ -13,27 +13,22 @@ const TABS = [
     {
         key: 'admin_js',
         mode: 'javascript',
-        title: 'Admin JS',
     },
     {
         key: 'forum_js',
         mode: 'javascript',
-        title: 'Forum JS',
     },
     {
         key: 'admin_less',
         mode: 'less',
-        title: 'Admin Less',
     },
     {
         key: 'forum_less',
         mode: 'less',
-        title: 'Forum Less',
     },
     {
         key: 'php',
         mode: 'php',
-        title: 'PHP',
     },
 ];
 
@@ -66,7 +61,7 @@ export default class ScratchpadPage extends Component {
     compileAlert(response, error = false) {
         let alert = new Alert({
             type: error ? 'error' : 'success',
-            children: error ? 'Compilation failed' : 'Compiled!',
+            children: app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.' + (error ? 'failure' : 'success')),
             controls: [Button.component({
                 className: 'Button Button--link',
                 onclick: () => {
@@ -74,7 +69,7 @@ export default class ScratchpadPage extends Component {
                     app.modal.show(new CompilationOutputModal(response));
                     alert = null;
                 },
-                children: 'View output',
+                children: app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.view-output'),
             })],
         });
 
@@ -121,6 +116,7 @@ export default class ScratchpadPage extends Component {
                         });
                         this.dirty = true;
                     }),
+                    title: app.translator.trans('clarkwinkelmann-scratchpad.admin.fields.title'),
                 }),
                 Switch.component({
                     state: app.data.settings['scratchpad.compileAutomatically'] === '1',
@@ -129,7 +125,7 @@ export default class ScratchpadPage extends Component {
                             'scratchpad.compileAutomatically': state ? '1' : '0',
                         });
                     },
-                    children: 'Compile JS automatically',
+                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.settings.compile-automatically'),
                 }),
                 Button.component({
                     className: 'Button',
@@ -166,7 +162,7 @@ export default class ScratchpadPage extends Component {
                             throw e;
                         });
                     },
-                    children: 'Save',
+                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.save'),
                     icon: 'fas fa-save',
                     loading: this.saving,
                     disabled: !this.dirty && scratchpad.exists,
@@ -176,7 +172,7 @@ export default class ScratchpadPage extends Component {
                     onclick: () => {
                         this.compile(scratchpad);
                     },
-                    children: 'Compile JS',
+                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.compile'),
                     icon: 'fas fa-file-import',
                     loading: this.compiling,
                     disabled: this.dirty || !scratchpad.exists || app.data.settings['scratchpad.compileAutomatically'] === '1',

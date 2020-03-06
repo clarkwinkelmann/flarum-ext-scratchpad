@@ -2,6 +2,8 @@ import app from 'flarum/app';
 import Page from 'flarum/components/Page';
 import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
+import LoadingIndicator from 'flarum/components/LoadingIndicator';
+import extractText from 'flarum/utils/extractText';
 import ScratchpadEditor from './ScratchpadEditor';
 
 /* global m */
@@ -34,13 +36,17 @@ export default class ScratchpadPage extends Page {
         this.scratchpad = app.store.createRecord('scratchpads', {
             id: random,
             attributes: {
-                title: 'Untitled',
+                title: app.translator.trans('clarkwinkelmann-scratchpad.admin.placeholders.untitled'),
                 enabled: true,
                 admin_js: 'app.initializers.add(\'scratchpad-' + random + '\', () => {\n' +
-                    indent + 'console.log(\'Hello, admin!\');\n' +
+                    indent + 'console.log(' + JSON.stringify(extractText(app.translator.trans('clarkwinkelmann-scratchpad.admin.placeholders.js-log', {
+                        frontend: 'admin',
+                    }))) + ');\n' +
                     '});\n',
                 forum_js: 'app.initializers.add(\'scratchpad-' + random + '\', () => {\n' +
-                    indent + 'console.log(\'Hello, forum!\');\n' +
+                    indent + 'console.log(' + JSON.stringify(extractText(app.translator.trans('clarkwinkelmann-scratchpad.admin.placeholders.js-log', {
+                        frontend: 'forum',
+                    }))) + ');\n' +
                     '});\n',
                 admin_less: '',
                 forum_less: '',
@@ -49,7 +55,7 @@ export default class ScratchpadPage extends Page {
                     'use Flarum\\Extend;\n' +
                     '\n' +
                     'return [\n' +
-                    indent + '// Register extenders here\n' +
+                    indent + '// ' + extractText(app.translator.trans('clarkwinkelmann-scratchpad.admin.placeholders.php-comment')) + '\n' +
                     '];\n',
             },
         });
@@ -64,21 +70,21 @@ export default class ScratchpadPage extends Page {
                         onclick: () => {
                             this.refreshScratchpads();
                         },
-                        children: 'Refresh',
+                        children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.refresh'),
                         icon: 'fas fa-sync',
                     }),
                 ]),
                 m('.ScratchpadList-item', {
                     className: this.scratchpad.exists ? '' : 'active',
                     onclick: () => {
-                        if (!this.scratchpad.exists && !confirm('Current scratchpad is not saved. Drop it and create new one ?')) {
+                        if (!this.scratchpad.exists && !confirm(extractText(app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.new-confirmation')))) {
                             return;
                         }
 
                         this.startNewScratchpad();
                     },
-                }, m('h5', 'New')),
-                this.scratchpads === null ? m('div', 'Loading...') : this.scratchpads.map(scratchpad => m('.ScratchpadList-item', {
+                }, m('h5', app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.new'))),
+                this.scratchpads === null ? m('div', LoadingIndicator.component({})) : this.scratchpads.map(scratchpad => m('.ScratchpadList-item', {
                     className: this.scratchpad.id() === scratchpad.id() ? 'active' : '',
                 }, [
                     Switch.component({
@@ -99,7 +105,9 @@ export default class ScratchpadPage extends Page {
                     Button.component({
                         className: 'Button',
                         onclick: () => {
-                            if (!confirm('Delete?')) {
+                            if (!confirm(extractText(app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.delete-confirmation', {
+                                title: scratchpad.title(),
+                            })))) {
                                 return;
                             }
 
@@ -113,7 +121,7 @@ export default class ScratchpadPage extends Page {
                                 }
                             });
                         },
-                        children: 'Delete',
+                        children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.delete'),
                     }),
                 ])),
             ]),

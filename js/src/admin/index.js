@@ -20,7 +20,7 @@ app.initializers.add('clarkwinkelmann-scratchpad', () => {
         items.add('scratchpad', AdminLinkButton.component({
             href: app.route('scratchpad'),
             icon: 'fas fa-code',
-            children: 'Scratchpad',
+            children: app.translator.trans('clarkwinkelmann-scratchpad.admin.menu.title'),
             description: app.translator.trans('clarkwinkelmann-scratchpad.admin.menu.description'),
         }));
     });
