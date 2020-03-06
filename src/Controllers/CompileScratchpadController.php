@@ -34,7 +34,7 @@ class CompileScratchpadController implements RequestHandlerInterface
             file_put_contents("$path/package.json", '{"name":"scratchpad","private":true,"dependencies":{"flarum-webpack-config":"^0.1.0-beta.10","webpack":"^4.0.0","webpack-cli":"^3.0.7"}}');
         }
 
-        $npmOutput = null;
+        $npmOutput = false;
 
         if (!file_exists("$path/node_modules")) {
             $npmOutput = shell_exec("cd $path && npm install 2>&1");
@@ -45,13 +45,17 @@ class CompileScratchpadController implements RequestHandlerInterface
 
         $webpackOutput = shell_exec("cd $path && node node_modules/.bin/webpack --mode development --config node_modules/flarum-webpack-config/index.js 2>&1");
 
-        $scratchpad->admin_js_compiled = file_get_contents("$path/dist/admin.js");
-        $scratchpad->forum_js_compiled = file_get_contents("$path/dist/forum.js");
-        $scratchpad->save();
+        $failed = str_contains($webpackOutput, 'Module build failed');
+
+        if (!$failed) {
+            $scratchpad->admin_js_compiled = file_get_contents("$path/dist/admin.js");
+            $scratchpad->forum_js_compiled = file_get_contents("$path/dist/forum.js");
+            $scratchpad->save();
+        }
 
         return new JsonResponse([
             'npmOutput' => $npmOutput,
             'webpackOutput' => $webpackOutput,
-        ]);
+        ], $failed ? 400 : 200);
     }
 }

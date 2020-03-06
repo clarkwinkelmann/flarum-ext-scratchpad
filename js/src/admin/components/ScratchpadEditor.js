@@ -2,8 +2,10 @@ import app from 'flarum/app';
 import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
+import Alert from 'flarum/components/Alert';
 import saveSettings from 'flarum/utils/saveSettings';
 import TabbedEditor from './TabbedEditor';
+import CompilationOutputModal from './CompilationOutputModal';
 
 /* global m */
 
@@ -49,14 +51,45 @@ export default class ScratchpadPage extends Component {
         app.request({
             method: 'POST',
             url: app.forum.attribute('apiUrl') + scratchpad.apiEndpoint() + '/compile',
-        }).then(() => {
+            errorHandler: e => {
+                this.compiling = false;
+                this.compileAlert(e.response, true);
+                m.redraw();
+            },
+        }).then(response => {
             this.compiling = false;
+            this.compileAlert(response);
             m.redraw();
-        }).catch(e => {
-            this.compiling = false;
-            m.redraw();
-            throw e;
         });
+    }
+
+    compileAlert(response, error = false) {
+        let alert = new Alert({
+            type: error ? 'error' : 'success',
+            children: error ? 'Compilation failed' : 'Compiled!',
+            controls: [Button.component({
+                className: 'Button Button--link',
+                onclick: () => {
+                    app.alerts.dismiss(alert);
+                    app.modal.show(new CompilationOutputModal(response));
+                    alert = null;
+                },
+                children: 'View output',
+            })],
+        });
+
+        app.alerts.show(alert);
+
+        if (!error) {
+            setTimeout(() => {
+                if (!alert) {
+                    return;
+                }
+
+                app.alerts.dismiss(alert);
+                alert = null;
+            }, 5000);
+        }
     }
 
     view() {
@@ -155,7 +188,7 @@ export default class ScratchpadPage extends Component {
                     children: 'Compile JS',
                     icon: 'fas fa-file-import',
                     loading: this.compiling,
-                    disabled: !scratchpad.exists || app.data.settings['scratchpad.compileAutomatically'] === '1',
+                    disabled: this.dirty || !scratchpad.exists || app.data.settings['scratchpad.compileAutomatically'] === '1',
                 }),
             ]),
             m('.ScratchpadColumns', app.data.settings['scratchpad.singleColumn'] === '1' ? TabbedEditor.component({

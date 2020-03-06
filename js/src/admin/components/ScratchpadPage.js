@@ -8,6 +8,8 @@ import ScratchpadEditor from './ScratchpadEditor';
 
 export default class ScratchpadPage extends Page {
     init() {
+        super.init();
+
         this.refreshScratchpads();
         this.startNewScratchpad();
     }
