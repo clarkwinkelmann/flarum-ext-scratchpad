@@ -1,0 +1,83 @@
+.ScratchpadPage {
+    display: flex;
+}
+
+.ScratchpadList {
+    width: 300px;
+}
+
+.ScratchpadList-item {
+    border-bottom: 1px solid #aaa;
+    padding: 20px;
+
+    &.active {
+        background: @control-bg;
+        font-weight: bold;
+
+        h5 {
+            font-weight: bold;
+        }
+    }
+
+    .Checkbox {
+        float: right;
+    }
+
+    h5 {
+        display: inline-block; // So the delete button can go on the right
+        font-size: 1em;
+        font-weight: normal;
+        cursor: pointer;
+        margin: 0 20px 0 0; // Margin with the delete button
+    }
+}
+
+.ScratchpadEditor {
+    flex-grow: 1;
+}
+
+.ScratchpadHeader {
+    background: #684ba6;
+    color: white;
+    padding: 10px;
+    display: flex;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+
+    & > *:not(:last-child) {
+        margin-right: 20px;
+    }
+
+    .FormControl {
+        width: 300px;
+        margin-right: auto;
+    }
+}
+
+.ScratchpadColumns {
+    display: flex;
+}
+
+.ScratchpadTabbed {
+    flex-grow: 1;
+    flex-basis: 0;
+    border-left: 5px solid #aaa;
+}
+
+.ScratchpadTabbed-tabs {
+    list-style: none;
+    margin: 0;
+    padding: 5px 0 0;
+
+    li {
+        display: inline-block;
+        padding: 10px;
+        cursor: pointer;
+        border: 1px solid #aaa;
+        border-radius: @border-radius @border-radius 0 0;
+
+        &.active {
+            background: @control-bg;
+            font-weight: bold;
+        }
+    }
+}

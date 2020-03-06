@@ -1,0 +1,34 @@
+{
+    "name": "clarkwinkelmann/flarum-ext-scratchpad",
+    "description": "Quickly test extension code for local development",
+    "keywords": [
+        "flarum"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": ">=0.1.0-beta.12 <0.1.0-beta.13"
+    },
+    "authors": [
+        {
+            "name": "Clark Winkelmann",
+            "email": "clark.winkelmann@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ClarkWinkelmann\\Scratchpad\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Scratchpad",
+            "icon": {
+                "name": "fas fa-code",
+                "backgroundColor": "#684ba6",
+                "color": "#fff"
+            }
+        }
+    }
+}
