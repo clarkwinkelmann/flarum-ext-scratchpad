@@ -21,6 +21,7 @@ $extenders = [
         ->delete('/scratchpads/{id:[0-9]+}', 'scratchpad.api.delete', Controllers\DeleteScratchpadController::class)
         ->post('/scratchpads/{id:[0-9]+}/compile', 'scratchpad.api.compile', Controllers\CompileScratchpadController::class),
 
+    new Extenders\CodeMirrorTheme(),
     new Extenders\ForumAttributes(),
     new Extenders\RegisterAssets(),
 ];

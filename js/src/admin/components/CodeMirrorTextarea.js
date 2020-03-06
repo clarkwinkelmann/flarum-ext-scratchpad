@@ -1,3 +1,4 @@
+import app from 'flarum/app';
 import Component from 'flarum/Component';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -16,7 +17,8 @@ export default class CodeMirrorTextarea extends Component {
 
                 const document = CodeMirror(element, {
                     value: this.props.value || '',
-                    indentUnit: 4,
+                    indentUnit: app.data.settings['scratchpad.indent'] || 4,
+                    theme: app.forum.attribute('scratchpadTheme') || 'default',
                     lineNumbers: true,
                     mode: this.props.mode,
                 }).getDoc();

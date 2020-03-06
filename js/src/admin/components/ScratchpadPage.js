@@ -29,16 +29,18 @@ export default class ScratchpadPage extends Page {
     startNewScratchpad() {
         const random = Math.random().toString(36).substring(7);
 
+        const indent = ' '.repeat(app.data.settings['scratchpad.indent'] || 4);
+
         this.scratchpad = app.store.createRecord('scratchpads', {
             id: random,
             attributes: {
                 title: 'Untitled',
                 enabled: true,
                 admin_js: 'app.initializers.add(\'scratchpad-' + random + '\', () => {\n' +
-                    '    console.log(\'Hello, admin!\');\n' +
+                    indent + 'console.log(\'Hello, admin!\');\n' +
                     '});\n',
                 forum_js: 'app.initializers.add(\'scratchpad-' + random + '\', () => {\n' +
-                    '    console.log(\'Hello, forum!\');\n' +
+                    indent + 'console.log(\'Hello, forum!\');\n' +
                     '});\n',
                 admin_less: '',
                 forum_less: '',
@@ -47,7 +49,7 @@ export default class ScratchpadPage extends Page {
                     'use Flarum\\Extend;\n' +
                     '\n' +
                     'return [\n' +
-                    '    // Register extenders here\n' +
+                    indent + '// Register extenders here\n' +
                     '];\n',
             },
         });

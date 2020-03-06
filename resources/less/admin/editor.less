@@ -64,11 +64,10 @@
 }
 
 .ScratchpadTabbed-tabs {
-    list-style: none;
-    margin: 0;
-    padding: 5px 0 0;
+    padding-top: 5px;
+    display: flex;
 
-    li {
+    .ScratchpadTabbed-tab {
         display: inline-block;
         padding: 10px;
         cursor: pointer;
@@ -79,5 +78,9 @@
             background: @control-bg;
             font-weight: bold;
         }
+    }
+
+    .ScratchpadTabbedSettings {
+        margin-left: auto;
     }
 }

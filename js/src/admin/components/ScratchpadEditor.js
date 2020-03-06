@@ -131,15 +131,6 @@ export default class ScratchpadPage extends Component {
                     },
                     children: 'Compile JS automatically',
                 }),
-                Switch.component({
-                    state: app.data.settings['scratchpad.singleColumn'] === '1',
-                    onchange: state => {
-                        saveSettings({
-                            'scratchpad.singleColumn': state ? '1' : '0',
-                        });
-                    },
-                    children: 'Single column',
-                }),
                 Button.component({
                     className: 'Button',
                     onclick: () => {
