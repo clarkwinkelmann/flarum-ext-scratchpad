@@ -43,7 +43,7 @@ class CompileScratchpadController implements RequestHandlerInterface
         file_put_contents("$path/admin.js", $scratchpad->admin_js);
         file_put_contents("$path/forum.js", $scratchpad->forum_js);
 
-        $webpackOutput = shell_exec("cd $path && node node_modules/.bin/webpack --mode development --config node_modules/flarum-webpack-config/index.js 2>&1");
+        $webpackOutput = shell_exec("cd $path && node_modules/.bin/webpack --mode development --config node_modules/flarum-webpack-config/index.js 2>&1");
 
         $failed = false;
 
