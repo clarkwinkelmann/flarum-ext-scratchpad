@@ -45,12 +45,16 @@ class CompileScratchpadController implements RequestHandlerInterface
 
         $webpackOutput = shell_exec("cd $path && node node_modules/.bin/webpack --mode development --config node_modules/flarum-webpack-config/index.js 2>&1");
 
-        $failed = str_contains($webpackOutput, 'Module build failed');
+        $failed = false;
 
-        if (!$failed) {
+        if (str_contains($webpackOutput, 'Module build failed')) {
+            $failed = true;
+        } else if (file_exists("$path/dist/admin.js") && file_exists("$path/dist/forum.js")) {
             $scratchpad->admin_js_compiled = file_get_contents("$path/dist/admin.js");
             $scratchpad->forum_js_compiled = file_get_contents("$path/dist/forum.js");
             $scratchpad->save();
+        } else {
+            $failed = true;
         }
 
         return new JsonResponse([
