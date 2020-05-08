@@ -4,6 +4,7 @@ clarkwinkelmann-scratchpad:
             title: Scratchpad settings
             single-column: Group editors in a single column instead of 3
             theme: CodeMirror theme (must refresh to take effect)
+            theme-auto: Auto (default on light theme, darcula on dark theme)
             indent: Number of spaces for indent
             compile-automatically: Compile JS automatically on save
 

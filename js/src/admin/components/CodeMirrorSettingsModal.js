@@ -81,7 +81,7 @@ export default class CodeMirrorSettingsModal extends SettingsModal {
 
     form() {
         const themeOptions = {
-            auto: 'Auto (default on light theme, darcula on dark theme)',
+            auto: app.translator.trans(translationPrefix + 'theme-auto'),
         };
 
         THEMES.forEach(theme => {
