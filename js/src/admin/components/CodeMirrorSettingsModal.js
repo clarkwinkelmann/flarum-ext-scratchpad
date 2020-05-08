@@ -91,7 +91,7 @@ export default class CodeMirrorSettingsModal extends SettingsModal {
         return [
             m('.Form-group', [
                 Switch.component({
-                    state: this.setting(settingsPrefix + 'singleColumn', '1')() === '1',
+                    state: this.setting(settingsPrefix + 'singleColumn')() === '1',
                     onchange: value => {
                         this.setting(settingsPrefix + 'singleColumn')(value ? '1' : '0');
                     },
