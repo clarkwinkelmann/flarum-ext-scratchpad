@@ -47,6 +47,26 @@ Please read the disclaimers and requirements above before installing.
 
     composer require clarkwinkelmann/flarum-ext-scratchpad
 
+## Customizing the NPM and Webpack commands
+
+The default commands should work fine on most Linux systems, but they are known to fail on some configurations, including (unsurprisingly) Windows.
+
+You can edit the commands by editing the settings named "NPM installl command" and "Webpack command" in the modal that can be accessed via the cog icon of the editor.
+
+Below are the default commands.
+
+`{{path}}` must be kept verbatim and will be replaced with the path to the scratchpad folder, which is the equivalent of the `js` folder of an extension.
+
+`2>&1` is necessary at the end to redirect errors to standard output so the compiler can inspect the output and look for error messages.
+
+NPM install:
+
+    cd {{path}} && npm install 2>&1
+
+Webpack:
+
+    cd {{path}} && node_modules/.bin/webpack --mode development --config node_modules/flarum-webpack-config/index.js 2>&1
+
 ## Links
 
 - [GitHub](https://github.com/clarkwinkelmann/flarum-ext-scratchpad)

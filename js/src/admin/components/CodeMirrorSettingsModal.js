@@ -113,6 +113,22 @@ export default class CodeMirrorSettingsModal extends SettingsModal {
                     bidi: this.setting(settingsPrefix + 'indent', 4),
                 }),
             ]),
+            m('.Form-group', [
+                m('label', app.translator.trans(translationPrefix + 'npm-install-command')),
+                m('input.FormControl', {
+                    type: 'text',
+                    bidi: this.setting(settingsPrefix + 'npmInstallCommand'),
+                    placeholder: app.translator.trans(translationPrefix + 'empty-for-default'),
+                }),
+            ]),
+            m('.Form-group', [
+                m('label', app.translator.trans(translationPrefix + 'webpack-command')),
+                m('input.FormControl', {
+                    type: 'text',
+                    bidi: this.setting(settingsPrefix + 'webpackCommand'),
+                    placeholder: app.translator.trans(translationPrefix + 'empty-for-default'),
+                }),
+            ]),
         ];
     }
 }

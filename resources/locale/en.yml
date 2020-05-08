@@ -6,6 +6,9 @@ clarkwinkelmann-scratchpad:
             theme: CodeMirror theme (must refresh to take effect)
             theme-auto: Auto (default on light theme, darcula on dark theme)
             indent: Number of spaces for indent
+            npm-install-command: NPM install command
+            webpack-command: Webpack command
+            empty-for-default: Leave empty for default command
             compile-automatically: Compile JS automatically on save
 
         controls:
