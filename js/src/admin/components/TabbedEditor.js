@@ -1,22 +1,21 @@
 import app from 'flarum/app';
-import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import CodeMirrorTextarea from './CodeMirrorTextarea';
 import CodeMirrorSettingsModal from './CodeMirrorSettingsModal';
 
 /* global m */
 
-export default class TabbedEditor extends Component {
-    init() {
-        this.tab = this.props.tabs[0];
+export default class TabbedEditor {
+    oninit(vnode) {
+        this.tab = vnode.attrs.tabs[0];
     }
 
-    view() {
-        const {scratchpad} = this.props;
+    view(vnode) {
+        const {scratchpad} = vnode.attrs;
 
         return m('.ScratchpadTabbed', [
             m('.ScratchpadTabbed-tabs', [
-                this.props.tabs.map(tab => m('.ScratchpadTabbed-tab', {
+                vnode.attrs.tabs.map(tab => m('.ScratchpadTabbed-tab', {
                     className: this.tab.key === tab.key ? 'active' : '',
                     onclick: () => {
                         this.tab = tab;
@@ -27,15 +26,15 @@ export default class TabbedEditor extends Component {
                     icon: 'fas fa-cog',
                     title: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.settings'),
                     onclick() {
-                        app.modal.show(new CodeMirrorSettingsModal());
+                        app.modal.show(CodeMirrorSettingsModal);
                     },
                 }),
             ]),
-            m('.ScratchpadTabbed-editor', CodeMirrorTextarea.component({
+            m('.ScratchpadTabbed-editor', m(CodeMirrorTextarea, {
                 key: scratchpad.id() + '-' + this.tab.key,
                 value: scratchpad[this.tab.key](),
                 onchange: value => {
-                    this.props.onchange(this.tab.key, value);
+                    vnode.attrs.onchange(this.tab.key, value);
                 },
                 mode: this.tab.mode,
             })),

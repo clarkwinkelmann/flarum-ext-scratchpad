@@ -11,18 +11,17 @@ app.initializers.add('clarkwinkelmann-scratchpad', () => {
 
     app.routes['scratchpad'] = {
         path: '/scratchpad',
-        component: ScratchpadPage.component(),
+        component: ScratchpadPage,
     };
 
-    app.extensionSettings['clarkwinkelmann-scratchpad'] = () => m.route(app.route('scratchpad'));
+    app.extensionSettings['clarkwinkelmann-scratchpad'] = () => m.route.set(app.route('scratchpad'));
 
     extend(AdminNav.prototype, 'items', items => {
         items.add('scratchpad', AdminLinkButton.component({
             href: app.route('scratchpad'),
             icon: 'fas fa-code',
-            children: app.translator.trans('clarkwinkelmann-scratchpad.admin.menu.title'),
             description: app.translator.trans('clarkwinkelmann-scratchpad.admin.menu.description'),
-        }));
+        }, app.translator.trans('clarkwinkelmann-scratchpad.admin.menu.title')));
     });
 
     showPhpErrors();

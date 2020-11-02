@@ -1,5 +1,4 @@
 import app from 'flarum/app';
-import Component from 'flarum/Component';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
@@ -7,26 +6,22 @@ import 'codemirror/mode/php/php';
 
 /* global m */
 
-export default class CodeMirrorTextarea extends Component {
+export default class CodeMirrorTextarea {
     view() {
-        return m('div', {
-            config: (element, isInitialized) => {
-                if (isInitialized) {
-                    return;
-                }
+        return m('div');
+    }
 
-                const document = CodeMirror(element, {
-                    value: this.props.value || '',
-                    indentUnit: app.data.settings['scratchpad.indent'] || 4,
-                    theme: app.forum.attribute('scratchpadTheme') || 'default',
-                    lineNumbers: true,
-                    mode: this.props.mode,
-                }).getDoc();
+    oncreate(vnode) {
+        const document = CodeMirror(vnode.dom, {
+            value: vnode.attrs.value || '',
+            indentUnit: app.data.settings['scratchpad.indent'] || 4,
+            theme: app.forum.attribute('scratchpadTheme') || 'default',
+            lineNumbers: true,
+            mode: vnode.attrs.mode,
+        }).getDoc();
 
-                document.on('change', () => {
-                    this.props.onchange(document.getValue());
-                });
-            },
+        document.on('change', () => {
+            vnode.attrs.onchange(document.getValue());
         });
     }
 }

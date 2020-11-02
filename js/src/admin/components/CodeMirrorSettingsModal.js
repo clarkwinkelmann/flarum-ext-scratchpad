@@ -95,8 +95,7 @@ export default class CodeMirrorSettingsModal extends SettingsModal {
                     onchange: value => {
                         this.setting(settingsPrefix + 'singleColumn')(value ? '1' : '0');
                     },
-                    children: app.translator.trans(translationPrefix + 'single-column'),
-                }),
+                }, app.translator.trans(translationPrefix + 'single-column')),
             ]),
             m('.Form-group', [
                 m('label', app.translator.trans(translationPrefix + 'theme')),

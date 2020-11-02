@@ -1,8 +1,6 @@
 import app from 'flarum/app';
-import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
-import Alert from 'flarum/components/Alert';
 import saveSettings from 'flarum/utils/saveSettings';
 import TabbedEditor from './TabbedEditor';
 import CompilationOutputModal from './CompilationOutputModal';
@@ -32,8 +30,8 @@ const TABS = [
     },
 ];
 
-export default class ScratchpadPage extends Component {
-    init() {
+export default class ScratchpadEditor {
+    oninit() {
         this.dirty = false;
         this.dirtyJs = false;
         this.saving = false;
@@ -59,36 +57,32 @@ export default class ScratchpadPage extends Component {
     }
 
     compileAlert(response, error = false) {
-        let alert = new Alert({
+        const alertId = app.alerts.show({
             type: error ? 'error' : 'success',
-            children: app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.' + (error ? 'failure' : 'success')),
             controls: [Button.component({
                 className: 'Button Button--link',
                 onclick: () => {
-                    app.alerts.dismiss(alert);
-                    app.modal.show(new CompilationOutputModal(response));
+                    app.alerts.dismiss(alertId);
+                    app.modal.show(CompilationOutputModal, response);
                     alert = null;
                 },
-                children: app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.view-output'),
-            })],
-        });
-
-        app.alerts.show(alert);
+            }, app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.view-output'))],
+        }, app.translator.trans('clarkwinkelmann-scratchpad.admin.compilation-alert.' + (error ? 'failure' : 'success')));
 
         if (!error) {
             setTimeout(() => {
-                if (!alert) {
+                if (!alertId) {
                     return;
                 }
 
-                app.alerts.dismiss(alert);
+                app.alerts.dismiss(alertId);
                 alert = null;
             }, 5000);
         }
     }
 
-    view() {
-        const {scratchpad} = this.props;
+    view(vnode) {
+        const {scratchpad} = vnode.attrs;
 
         const onchange = (key, value) => {
             scratchpad.pushAttributes({
@@ -110,12 +104,12 @@ export default class ScratchpadPage extends Component {
                     className: 'FormControl',
                     type: 'text',
                     value: scratchpad.title(),
-                    oninput: m.withAttr('value', value => {
+                    oninput: event => {
                         scratchpad.pushAttributes({
-                            title: value,
+                            title: event.target.value,
                         });
                         this.dirty = true;
-                    }),
+                    },
                     title: app.translator.trans('clarkwinkelmann-scratchpad.admin.fields.title'),
                 }),
                 Switch.component({
@@ -125,8 +119,7 @@ export default class ScratchpadPage extends Component {
                             'scratchpad.compileAutomatically': state ? '1' : '0',
                         });
                     },
-                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.settings.compile-automatically'),
-                }),
+                }, app.translator.trans('clarkwinkelmann-scratchpad.admin.settings.compile-automatically')),
                 Button.component({
                     className: 'Button',
                     onclick: () => {
@@ -148,7 +141,7 @@ export default class ScratchpadPage extends Component {
                             this.dirtyJs = false;
 
                             if (willBeNewOne) {
-                                this.props.oncreate(scratchpad);
+                                vnode.attrs.onsave(scratchpad);
                             }
 
                             if (shouldRecompile) {
@@ -162,27 +155,25 @@ export default class ScratchpadPage extends Component {
                             throw e;
                         });
                     },
-                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.save'),
                     icon: 'fas fa-save',
                     loading: this.saving,
                     disabled: !this.dirty && scratchpad.exists,
-                }),
+                }, app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.save')),
                 Button.component({
                     className: 'Button',
                     onclick: () => {
                         this.compile(scratchpad);
                     },
-                    children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.compile'),
                     icon: 'fas fa-file-import',
                     loading: this.compiling,
                     disabled: this.dirty || !scratchpad.exists || app.data.settings['scratchpad.compileAutomatically'] === '1',
-                }),
+                }, app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.compile')),
             ]),
-            m('.ScratchpadColumns', app.data.settings['scratchpad.singleColumn'] === '1' ? TabbedEditor.component({
+            m('.ScratchpadColumns', app.data.settings['scratchpad.singleColumn'] === '1' ? m(TabbedEditor, {
                 tabs: TABS,
                 scratchpad,
                 onchange,
-            }) : ['javascript', 'less', 'php'].map(mode => TabbedEditor.component({
+            }) : ['javascript', 'less', 'php'].map(mode => m(TabbedEditor, {
                 tabs: TABS.filter(tab => tab.mode === mode),
                 scratchpad,
                 onchange,

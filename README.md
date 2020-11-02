@@ -71,3 +71,4 @@ Webpack:
 
 - [GitHub](https://github.com/clarkwinkelmann/flarum-ext-scratchpad)
 - [Packagist](https://packagist.org/packages/clarkwinkelmann/flarum-ext-scratchpad)
+- [Discuss](https://discuss.flarum.org/d/23016)

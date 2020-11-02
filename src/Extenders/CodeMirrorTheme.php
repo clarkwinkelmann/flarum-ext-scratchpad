@@ -17,7 +17,7 @@ class CodeMirrorTheme implements ExtenderInterface
     {
         $container->resolving(
             'flarum.frontend.admin',
-            function (Frontend $frontend, Container $container) {
+            function (Frontend $frontend) {
                 $theme = $this->getTheme();
 
                 if (!$theme) {

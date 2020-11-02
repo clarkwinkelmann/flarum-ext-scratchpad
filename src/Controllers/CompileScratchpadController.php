@@ -3,8 +3,9 @@
 namespace ClarkWinkelmann\Scratchpad\Controllers;
 
 use ClarkWinkelmann\Scratchpad\Scratchpad;
+use Flarum\Foundation\Paths;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,20 +13,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CompileScratchpadController implements RequestHandlerInterface
 {
-    use AssertPermissionTrait;
-
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->assertAdmin($request->getAttribute('actor'));
+        $request->getAttribute('actor')->assertAdmin();
 
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
         /**
          * @var $scratchpad Scratchpad
          */
         $scratchpad = Scratchpad::query()->findOrFail($id);
 
-        $path = app()->storagePath() . '/scratchpad';
+        $path = app(Paths::class)->storage . '/scratchpad';
 
         if (!file_exists($path)) {
             mkdir($path);

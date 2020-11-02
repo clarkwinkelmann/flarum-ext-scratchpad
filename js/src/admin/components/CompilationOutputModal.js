@@ -17,9 +17,9 @@ export default class RequestErrorModal extends Modal {
     content() {
         return m('.Modal-body', [
             m('h3', app.translator.trans(translationPrefix + 'webpack')),
-            m('pre', this.props.webpackOutput),
+            m('pre', this.attrs.webpackOutput),
             m('h3', app.translator.trans(translationPrefix + 'npm')),
-            this.props.npmOutput === false ? m('p', app.translator.trans(translationPrefix + 'npm-not-run')) : m('pre', this.props.npmOutput),
+            this.attrs.npmOutput === false ? m('p', app.translator.trans(translationPrefix + 'npm-not-run')) : m('pre', this.attrs.npmOutput),
         ]);
     }
 }

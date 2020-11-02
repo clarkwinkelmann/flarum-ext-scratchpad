@@ -4,18 +4,16 @@ namespace ClarkWinkelmann\Scratchpad\Controllers;
 
 use ClarkWinkelmann\Scratchpad\Scratchpad;
 use Flarum\Api\Controller\AbstractDeleteController;
-use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteScratchpadController extends AbstractDeleteController
 {
-    use AssertPermissionTrait;
-
     protected function delete(ServerRequestInterface $request)
     {
-        $this->assertAdmin($request->getAttribute('actor'));
+        $request->getAttribute('actor')->assertAdmin();
 
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
         /**
          * @var $scratchpad Scratchpad

@@ -9,8 +9,8 @@ import ScratchpadEditor from './ScratchpadEditor';
 /* global m */
 
 export default class ScratchpadPage extends Page {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
         this.refreshScratchpads();
         this.startNewScratchpad();
@@ -70,9 +70,8 @@ export default class ScratchpadPage extends Page {
                         onclick: () => {
                             this.refreshScratchpads();
                         },
-                        children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.refresh'),
                         icon: 'fas fa-sync',
-                    }),
+                    }, app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.refresh')),
                 ]),
                 m('.ScratchpadList-item', {
                     className: this.scratchpad.exists ? '' : 'active',
@@ -121,13 +120,12 @@ export default class ScratchpadPage extends Page {
                                 }
                             });
                         },
-                        children: app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.delete'),
-                    }),
+                    }, app.translator.trans('clarkwinkelmann-scratchpad.admin.controls.delete')),
                 ])),
             ]),
-            this.scratchpad ? ScratchpadEditor.component({
+            this.scratchpad ? m(ScratchpadEditor, {
                 scratchpad: this.scratchpad,
-                oncreate: scratchpad => {
+                onsave: scratchpad => {
                     this.scratchpad = scratchpad;
                     this.refreshScratchpads();
                 },
