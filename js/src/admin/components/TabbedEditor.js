@@ -1,7 +1,7 @@
 import app from 'flarum/app';
 import Button from 'flarum/components/Button';
 import CodeMirrorTextarea from './CodeMirrorTextarea';
-import CodeMirrorSettingsModal from './CodeMirrorSettingsModal';
+import CodeMirrorSettingsModal from '../modals/CodeMirrorSettingsModal';
 
 /* global m */
 

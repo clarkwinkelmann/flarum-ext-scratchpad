@@ -3,6 +3,7 @@
 namespace ClarkWinkelmann\Scratchpad;
 
 use Flarum\Extend;
+use Flarum\Http\Middleware\AuthenticateWithSession;
 
 $extenders = [
     (new Extend\Frontend('forum'))
@@ -21,10 +22,21 @@ $extenders = [
         ->delete('/scratchpads/{id:[0-9]+}', 'scratchpad.api.delete', Controllers\DeleteScratchpadController::class)
         ->post('/scratchpads/{id:[0-9]+}/compile', 'scratchpad.api.compile', Controllers\CompileScratchpadController::class),
 
+    (new Extend\Middleware('forum'))
+        ->insertAfter(AuthenticateWithSession::class, Middlewares\AuthenticateWithLiveToken::class),
+    (new Extend\Middleware('admin'))
+        ->insertAfter(AuthenticateWithSession::class, Middlewares\AuthenticateWithLiveToken::class),
+
+    (new Extend\ErrorHandling())
+        ->handler(ErrorHandling\ValidationExceptionWithMeta::class, ErrorHandling\ValidationExceptionWithMetaHandler::class),
+
     new Extenders\CodeMirrorTheme(),
     new Extenders\ForumAttributes(),
     new Extenders\RegisterAssets(),
+    new Extenders\TestRoutes(),
 ];
+
+LiveCodeHelper::boot();
 
 /**
  * @var $repository ScratchpadRepository
@@ -33,6 +45,10 @@ $repository = app(ScratchpadRepository::class);
 
 try {
     foreach ($repository->allEnabled() as $scratchpad) {
+        if ($scratchpad->id === LiveCodeHelper::$ignoreScratchpadId) {
+            continue;
+        }
+
         try {
             $return = $scratchpad->evaluatePhp();
 
@@ -50,6 +66,10 @@ try {
     if (!str_contains($exception->getMessage(), 'scratchpads')) {
         throw $exception;
     }
+}
+
+if (LiveCodeHelper::$php) {
+    $extenders = array_merge($extenders, PHPEvaluator::evaluate(LiveCodeHelper::$php));
 }
 
 return $extenders;

@@ -128,6 +128,14 @@ export default class CodeMirrorSettingsModal extends SettingsModal {
                     placeholder: app.translator.trans(translationPrefix + 'empty-for-default'),
                 }),
             ]),
+            m('.Form-group', [
+                Switch.component({
+                    state: this.setting(settingsPrefix + 'validateLive')() !== '0',
+                    onchange: value => {
+                        this.setting(settingsPrefix + 'validateLive')(value ? '1' : '0');
+                    },
+                }, app.translator.trans(translationPrefix + 'validate-live')),
+            ]),
         ];
     }
 }

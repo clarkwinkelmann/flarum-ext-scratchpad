@@ -26,9 +26,11 @@ You can give names to individual scratchpads and enable/disable them via a check
 There's a good chance that despite the checks in place you will be able to save invalid code.
 If that happens, the easier is to go in the database and disable the scratchpad that's responsible.
 
-PHP is validated at save time, an invalid syntax will prevent saving.
-Less is currently not validated.
-Javascript is not validated, but if the compilation fails, the compiled code will not be loaded on the forum and you will see a message in the editor.
+PHP and Less are validated by doing a "stateless" background request to the forum and admin homepage with the new code when saving.
+If the background request fails, a validation error is shown and the scratchpad is not saved.
+This background request can be disabled in the extension settings.
+
+Javascript is not validated during save, but if the compilation fails, the compiled code will not be loaded on the forum and you will see a message in the editor.
 
 Javascript compilation is done locally by calling node through PHP.
 A `scratchpad` folder will be created under `storage`.

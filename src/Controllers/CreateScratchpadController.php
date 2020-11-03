@@ -6,6 +6,7 @@ use ClarkWinkelmann\Scratchpad\Scratchpad;
 use ClarkWinkelmann\Scratchpad\ScratchpadRepository;
 use ClarkWinkelmann\Scratchpad\Serializers\ScratchpadSerializer;
 use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\User\User;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -16,7 +17,12 @@ class CreateScratchpadController extends AbstractCreateController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $request->getAttribute('actor')->assertAdmin();
+        /**
+         * @var $actor User
+         */
+        $actor = $request->getAttribute('actor');
+
+        $actor->assertAdmin();
 
         $scratchpad = new Scratchpad();
 
@@ -27,7 +33,7 @@ class CreateScratchpadController extends AbstractCreateController
          */
         $repository = app(ScratchpadRepository::class);
 
-        $repository->validateAndFill($scratchpad, $attributes);
+        $repository->validateAndFill($scratchpad, $attributes, $actor);
 
         $scratchpad->save();
 

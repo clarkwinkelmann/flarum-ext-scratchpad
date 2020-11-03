@@ -9,6 +9,7 @@ clarkwinkelmann-scratchpad:
             npm-install-command: NPM install command
             webpack-command: Webpack command
             empty-for-default: Leave empty for default command
+            validate-live: Perform a request to homepage to validate Less and PHP before saving
             compile-automatically: Compile JS automatically on save
 
         controls:

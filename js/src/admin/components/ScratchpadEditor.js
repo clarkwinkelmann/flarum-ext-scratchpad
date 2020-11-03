@@ -3,7 +3,7 @@ import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
 import saveSettings from 'flarum/utils/saveSettings';
 import TabbedEditor from './TabbedEditor';
-import CompilationOutputModal from './CompilationOutputModal';
+import CompilationOutputModal from '../modals/CompilationOutputModal';
 
 /* global m */
 

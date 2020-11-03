@@ -4,6 +4,7 @@ namespace ClarkWinkelmann\Scratchpad\Extenders;
 
 use ClarkWinkelmann\Scratchpad\Scratchpad;
 use ClarkWinkelmann\Scratchpad\ScratchpadRepository;
+use ClarkWinkelmann\Scratchpad\LiveCodeHelper;
 use Flarum\Extend\ExtenderInterface;
 use Flarum\Extension\Extension;
 use Flarum\Frontend\Assets;
@@ -23,12 +24,32 @@ class RegisterAssets implements ExtenderInterface
             $this->registerScratchpad($container, $scratchpad, 'admin');
             $this->registerScratchpad($container, $scratchpad, 'forum');
         }
+
+        if (LiveCodeHelper::$forumLess) {
+            $container->resolving('flarum.assets.forum', function (Assets $assets) {
+                $assets->css(function (SourceCollector $sources) {
+                    $sources->addString(function () {
+                        return LiveCodeHelper::$forumLess;
+                    });
+                });
+            });
+        }
+
+        if (LiveCodeHelper::$adminLess) {
+            $container->resolving('flarum.assets.admin', function (Assets $assets) {
+                $assets->css(function (SourceCollector $sources) {
+                    $sources->addString(function () {
+                        return LiveCodeHelper::$adminLess;
+                    });
+                });
+            });
+        }
     }
 
     protected function registerScratchpad(Container $container, Scratchpad $scratchpad, string $frontend)
     {
         $js = $scratchpad->{$frontend . '_js_compiled'};
-        $less = $scratchpad->{$frontend . '_less'};
+        $less = $scratchpad->id === LiveCodeHelper::$ignoreScratchpadId ? '' : $scratchpad->{$frontend . '_less'};
 
         if (empty($js) && empty($less)) {
             return;

@@ -4,7 +4,6 @@ namespace ClarkWinkelmann\Scratchpad;
 
 use Carbon\Carbon;
 use Flarum\Database\AbstractModel;
-use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -38,34 +37,8 @@ class Scratchpad extends AbstractModel
         'php',
     ];
 
-    public function phpForEval(): string
-    {
-        $php = $this->php;
-
-        // Remove opening `<?php` token for eval()
-        if (Str::startsWith($php, '<?php')) {
-            $php = substr($php, 5);
-        }
-
-        return $php;
-    }
-
     public function evaluatePhp()
     {
-        // Convert errors and notices into exception so we can catch them before they break the responses
-        // from https://www.php.net/manual/en/class.errorexception.php
-        set_error_handler(function ($severity, $message, $file, $line) {
-            if (!(error_reporting() & $severity)) {
-                return;
-            }
-
-            throw new \ErrorException($message, 0, $severity, $file, $line);
-        });
-
-        $return = eval($this->phpForEval());
-
-        restore_error_handler();
-
-        return $return;
+        return PHPEvaluator::evaluate($this->php);
     }
 }
