@@ -47,7 +47,3 @@ clarkwinkelmann-scratchpad:
             webpack: Webpack output
             npm: NPM output
             npm-not-run: NPM did not run
-
-        menu:
-            title: Scratchpad
-            description: Easily test code on your development forum

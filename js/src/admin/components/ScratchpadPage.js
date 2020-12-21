@@ -1,5 +1,5 @@
 import app from 'flarum/app';
-import Page from 'flarum/components/Page';
+import ExtensionPage from 'flarum/components/ExtensionPage';
 import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
@@ -8,7 +8,7 @@ import ScratchpadEditor from './ScratchpadEditor';
 
 /* global m */
 
-export default class ScratchpadPage extends Page {
+export default class ScratchpadPage extends ExtensionPage {
     oninit(vnode) {
         super.oninit(vnode);
 
@@ -61,7 +61,7 @@ export default class ScratchpadPage extends Page {
         });
     }
 
-    view() {
+    content() {
         return m('.ScratchpadPage', [
             m('.ScratchpadList', [
                 m('.ScratchpadHeader', [
