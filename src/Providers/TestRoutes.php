@@ -1,18 +1,18 @@
 <?php
 
-namespace ClarkWinkelmann\Scratchpad\Extenders;
+namespace ClarkWinkelmann\Scratchpad\Providers;
 
-use Flarum\Extend\ExtenderInterface;
-use Flarum\Extension\Extension;
+use Flarum\Foundation\AbstractServiceProvider;
 use Flarum\Http\RouteCollection;
 use Flarum\Http\RouteHandlerFactory;
 use Illuminate\Contracts\Container\Container;
 
-class TestRoutes implements ExtenderInterface
+class TestRoutes extends AbstractServiceProvider
 {
-    public function extend(Container $container, Extension $extension = null)
+    public function register()
     {
-        $container->resolving(
+        // We need to use a service provider instead of Extend\Frontend::route because we need a POST route
+        $this->container->resolving(
             'flarum.forum.routes',
             function (RouteCollection $collection, Container $container) {
                 /** @var RouteHandlerFactory $factory */
@@ -22,7 +22,7 @@ class TestRoutes implements ExtenderInterface
             }
         );
 
-        $container->resolving(
+        $this->container->resolving(
             'flarum.admin.routes',
             function (RouteCollection $collection, Container $container) {
                 /** @var RouteHandlerFactory $factory */

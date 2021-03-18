@@ -14,6 +14,17 @@ use Illuminate\Support\Str;
 
 class ScratchpadRepository
 {
+    protected $validator;
+    protected $settings;
+    protected $config;
+
+    public function __construct(Factory $validator, SettingsRepositoryInterface $settings, Config $config)
+    {
+        $this->validator = $validator;
+        $this->settings = $settings;
+        $this->config = $config;
+    }
+
     protected function query()
     {
         return Scratchpad::query()->orderBy('updated_at', 'desc');
@@ -37,11 +48,6 @@ class ScratchpadRepository
 
     public function validateAndFill(Scratchpad $scratchpad, array $attributes, User $actor)
     {
-        /**
-         * @var $validation Factory
-         */
-        $validation = app(Factory::class);
-
         $rules = [
             'title' => 'required|string|max:255',
             'admin_js' => 'nullable|string|max:16777215',
@@ -51,7 +57,7 @@ class ScratchpadRepository
             'php' => 'nullable|string|max:16777215',
         ];
 
-        $validation->make($attributes, $rules)->validate();
+        $this->validator->make($attributes, $rules)->validate();
 
         $scratchpad->forceFill(Arr::only($attributes, array_keys($rules)));
 
@@ -66,18 +72,13 @@ class ScratchpadRepository
 
     protected function makeTestRequest(string $frontend, Scratchpad $scratchpad, User $actor)
     {
-        /**
-         * @var $settings SettingsRepositoryInterface
-         */
-        $settings = app(SettingsRepositoryInterface::class);
-
-        if ($settings->get('scratchpad.validateLive') === '0') {
+        if ($this->settings->get('scratchpad.validateLive') === '0') {
             return;
         }
 
         // Create a token that will authenticate ourselves with the live test data
         $token = Str::random(32);
-        $settings->set('scratchpad.liveCodeToken', $token);
+        $this->settings->set('scratchpad.liveCodeToken', $token);
 
         $params = [
             'scratchpadLiveToken' => $token,
@@ -101,7 +102,7 @@ class ScratchpadRepository
         }
 
         try {
-            $response = (new Client())->post(app(Config::class)->url() . '/' . ($frontend === 'admin' ? 'admin/' : '') . 'scratchpad/test', [
+            $response = (new Client())->post($this->config->url() . '/' . ($frontend === 'admin' ? 'admin/' : '') . 'scratchpad/test', [
                 'http_errors' => false,
                 'form_params' => $params,
             ]);
@@ -121,7 +122,7 @@ class ScratchpadRepository
                 ]);
             }
         } finally {
-            $settings->delete('scratchpad.liveCodeToken');
+            $this->settings->delete('scratchpad.liveCodeToken');
         }
     }
 }

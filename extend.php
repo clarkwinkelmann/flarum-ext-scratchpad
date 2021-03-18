@@ -2,6 +2,7 @@
 
 namespace ClarkWinkelmann\Scratchpad;
 
+use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend;
 use Flarum\Http\Middleware\AuthenticateWithSession;
 
@@ -11,7 +12,8 @@ $extenders = [
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/resources/less/admin.less'),
+        ->css(__DIR__ . '/resources/less/admin.less')
+        ->content(Content\AddThemeCss::class),
 
     new Extend\Locales(__DIR__ . '/resources/locale'),
 
@@ -30,10 +32,12 @@ $extenders = [
     (new Extend\ErrorHandling())
         ->handler(ErrorHandling\ValidationExceptionWithMeta::class, ErrorHandling\ValidationExceptionWithMetaHandler::class),
 
-    new Extenders\CodeMirrorTheme(),
-    new Extenders\ForumAttributes(),
-    new Extenders\RegisterAssets(),
-    new Extenders\TestRoutes(),
+    (new Extend\ApiSerializer(ForumSerializer::class))
+        ->attributes(ForumAttributes::class),
+
+    (new Extend\ServiceProvider())
+        ->register(Providers\RegisterAssets::class)
+        ->register(Providers\TestRoutes::class),
 ];
 
 LiveCodeHelper::boot();
@@ -41,7 +45,7 @@ LiveCodeHelper::boot();
 /**
  * @var $repository ScratchpadRepository
  */
-$repository = app(ScratchpadRepository::class);
+$repository = resolve(ScratchpadRepository::class);
 
 try {
     foreach ($repository->allEnabled() as $scratchpad) {

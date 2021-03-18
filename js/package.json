@@ -1,5 +1,5 @@
 {
-    "name": "@clarkwinkelmann/flarum-ext-scratchpad",
+    "name": "@clarkwinkelmann/scratchpad",
     "version": "0.0.0",
     "private": true,
     "dependencies": {

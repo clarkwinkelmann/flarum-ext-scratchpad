@@ -15,6 +15,13 @@ class UpdateScratchpadController extends AbstractShowController
 {
     public $serializer = ScratchpadSerializer::class;
 
+    protected $repository;
+
+    public function __construct(ScratchpadRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     protected function data(ServerRequestInterface $request, Document $document)
     {
         /**
@@ -38,12 +45,7 @@ class UpdateScratchpadController extends AbstractShowController
         } else {
             $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
-            /**
-             * @var $repository ScratchpadRepository
-             */
-            $repository = app(ScratchpadRepository::class);
-
-            $repository->validateAndFill($scratchpad, $attributes, $actor);
+            $this->repository->validateAndFill($scratchpad, $attributes, $actor);
         }
 
         $scratchpad->save();

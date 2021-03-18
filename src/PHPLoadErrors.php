@@ -15,7 +15,7 @@ class PHPLoadErrors
         /**
          * @var $logger LoggerInterface
          */
-        $logger = app(LoggerInterface::class);
+        $logger = resolve(LoggerInterface::class);
         $logger->error($exception);
     }
 }

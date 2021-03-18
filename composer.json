@@ -7,13 +7,14 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/core": ">=0.1.0-beta.15 <0.1.0-beta.16",
+        "flarum/core": ">=0.1.0-beta.16 <0.1.0-beta.17",
         "guzzlehttp/guzzle": "^6.0||^7.0"
     },
     "authors": [
         {
             "name": "Clark Winkelmann",
             "email": "clark.winkelmann@gmail.com",
+            "homepage": "https://clarkwinkelmann.com/",
             "role": "Developer"
         }
     ],
@@ -30,6 +31,7 @@
     "extra": {
         "flarum-extension": {
             "title": "Scratchpad",
+            "category": "feature",
             "icon": {
                 "name": "fas fa-code",
                 "backgroundColor": "#684ba6",

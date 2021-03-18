@@ -15,7 +15,7 @@ class AuthenticateWithLiveToken implements MiddlewareInterface
     {
         // We need a way to authenticate the user because otherwise it's impossible to test-load the admin frontend
         if (LiveCodeHelper::$actorId) {
-            $actor = User::find(LiveCodeHelper::$actorId);
+            $actor = User::query()->find(LiveCodeHelper::$actorId);
 
             if ($actor) {
                 $request = $request->withAttribute('actor', $actor);
