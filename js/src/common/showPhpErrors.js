@@ -1,5 +1,5 @@
 import {extend} from 'flarum/common/extend';
-import app from 'flarum/admin/app';
+import app from 'flarum/app';
 import Application from 'flarum/common/Application';
 
 export default function () {
