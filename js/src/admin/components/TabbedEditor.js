@@ -1,5 +1,5 @@
-import app from 'flarum/app';
-import Button from 'flarum/components/Button';
+import app from 'flarum/admin/app';
+import Button from 'flarum/common/components/Button';
 import CodeMirrorTextarea from './CodeMirrorTextarea';
 import CodeMirrorSettingsModal from '../modals/CodeMirrorSettingsModal';
 

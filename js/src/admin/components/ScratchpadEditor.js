@@ -1,7 +1,7 @@
-import app from 'flarum/app';
-import Button from 'flarum/components/Button';
-import Switch from 'flarum/components/Switch';
-import saveSettings from 'flarum/utils/saveSettings';
+import app from 'flarum/admin/app';
+import Button from 'flarum/common/components/Button';
+import Switch from 'flarum/common/components/Switch';
+import saveSettings from 'flarum/admin/utils/saveSettings';
 import TabbedEditor from './TabbedEditor';
 import CompilationOutputModal from '../modals/CompilationOutputModal';
 

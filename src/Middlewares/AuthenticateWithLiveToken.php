@@ -3,6 +3,7 @@
 namespace ClarkWinkelmann\Scratchpad\Middlewares;
 
 use ClarkWinkelmann\Scratchpad\LiveCodeHelper;
+use Flarum\Http\RequestUtil;
 use Flarum\User\User;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,10 +16,13 @@ class AuthenticateWithLiveToken implements MiddlewareInterface
     {
         // We need a way to authenticate the user because otherwise it's impossible to test-load the admin frontend
         if (LiveCodeHelper::$actorId) {
+            /**
+             * @var User $actor
+             */
             $actor = User::query()->find(LiveCodeHelper::$actorId);
 
             if ($actor) {
-                $request = $request->withAttribute('actor', $actor);
+                $request = RequestUtil::withActor($request, $actor);
                 $request = $request->withAttribute('bypassCsrfToken', true);
                 // Unlike AuthenticateWithHeader, we don't remove the session attribute
                 // Doing so would create an issue in Content\CorePayload which expects the session to exist

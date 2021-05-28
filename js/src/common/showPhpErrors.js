@@ -1,6 +1,6 @@
-import {extend} from 'flarum/extend';
-import app from 'flarum/app';
-import Application from 'flarum/Application';
+import {extend} from 'flarum/common/extend';
+import app from 'flarum/admin/app';
+import Application from 'flarum/common/Application';
 
 export default function () {
     extend(Application.prototype, 'mount', function () {

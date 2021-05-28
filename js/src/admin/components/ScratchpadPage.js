@@ -1,9 +1,9 @@
-import app from 'flarum/app';
-import ExtensionPage from 'flarum/components/ExtensionPage';
-import Button from 'flarum/components/Button';
-import Switch from 'flarum/components/Switch';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import extractText from 'flarum/utils/extractText';
+import app from 'flarum/admin/app';
+import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import Button from 'flarum/common/components/Button';
+import Switch from 'flarum/common/components/Switch';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import extractText from 'flarum/common/utils/extractText';
 import ScratchpadEditor from './ScratchpadEditor';
 
 /* global m */

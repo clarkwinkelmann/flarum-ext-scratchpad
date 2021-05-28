@@ -1,4 +1,4 @@
-import app from 'flarum/app';
+import app from 'flarum/admin/app';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';

@@ -13,7 +13,7 @@ class ScratchpadSerializer extends AbstractSerializer
      * @param Scratchpad $scratchpad
      * @return array
      */
-    protected function getDefaultAttributes($scratchpad)
+    protected function getDefaultAttributes($scratchpad): array
     {
         return $scratchpad->toArray();
     }

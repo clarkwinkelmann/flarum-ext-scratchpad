@@ -1,5 +1,5 @@
-import app from 'flarum/app';
-import Modal from 'flarum/components/Modal';
+import app from 'flarum/admin/app';
+import Modal from 'flarum/common/components/Modal';
 
 /* global m */
 
